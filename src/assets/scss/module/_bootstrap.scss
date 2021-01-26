@@ -1,0 +1,39 @@
+.table {
+  th {
+    color: #b1b1b1;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    vertical-align: middle;
+  }
+
+  tr:focus,
+  th:focus,
+  td:focus {
+    outline: none;
+  }
+
+  &.table-editable {
+    .form-control {
+      padding: 0.5rem;
+      line-height: normal;
+      height: auto;
+
+      &:focus {
+        border-color: #c4c4c4;
+      }
+    }
+
+    &.table-striped tbody tr:nth-of-type(odd) {
+      .form-control {
+        background-color: #ebedf3;
+        border-color: #d7d7d7;
+
+        &:focus {
+          border-color: #bcbcbc;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+.vc-container {
+  font-family: Poppins !important;
+  border: none !important;
+
+  .vc-title {
+    font-weight: 500 !important;
+  }
+
+  .vc-weekday {
+    font-weight: 500 !important;
+  }
+
+  .vc-grid-container {
+    gap: 8px 0px !important;
+  }
+
+  .vc-dots {
+    bottom: -5px;
+    position: absolute;
+  }
+
+  .vc-header,
+  .vc-arrows-container {
+    padding-top: 1.5em !important;
+    padding-bottom: 1.5em !important;
+  }
+
+  .vc-day-content {
+    cursor: pointer;
+    border-radius: 0.25rem;
+    height: 38px;
+    width: 38px;
+
+    &:focus {
+      background: #6699ff;
+      color: #ffffff;
+    }
+  }
+}
+
+.daterangepicker {
+  z-index: 1002;
+}
+
+@media (max-width: 991.98px) {
+  [data-offcanvas-offcanvas='on'] {
+    overflow: scroll !important;
+  }
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #b5b5c3;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+.input-datalist-group {
+  color: #3f4254 !important;
+  background-color: #e4e6ef !important;
+  border-color: #e4e6ef !important;
+  border-left: none;
+
+  &:hover,
+  &:focus {
+    background-color: #d7dae7 !important;
+    border-color: #d7dae7 !important;
+  }
+}
+
+// Utilities
+.border-square-left {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.border-square-right {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+@import './module/vuejs-datepicker';
+@import './module/bootstrap';
+@import './module/ps';
