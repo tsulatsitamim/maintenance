@@ -4,6 +4,8 @@ import { isHasAccess } from 'metronic-vue'
 import Task from '../views/Task/Task.vue'
 
 import Location from '../views/Location/Location.vue'
+import AssetType from '../views/AssetType/AssetType.vue'
+
 import Chart from '../views/StaffChart/Chart.vue'
 import OfficeSummary from '../views/OfficeSummary/Summary.vue'
 import OfficeChart from '../views/OfficeChart/Chart.vue'
@@ -25,6 +27,12 @@ const routes = [
     name: 'Daftar Lokasi',
     component: Location,
   },
+  {
+    path: '/asset-types',
+    name: 'Daftar Jenis Aset',
+    component: AssetType,
+  },
+
   {
     path: '/task',
     name: 'Task',
