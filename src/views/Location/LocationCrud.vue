@@ -135,12 +135,18 @@
           <span>
             <button
               type="button"
-              class="btn btn-icon"
+              class="btn btn-sm btn-text-dark btn-hover-light-dark btn-icon ml-3"
               data-toggle="tooltip"
               title="Hapus"
               @click="removeLink(linkIndex)"
             >
-              <BIconTrash font-scale="1"></BIconTrash>
+              <span class="svg-icon svg-icon-dark svg-icon-md">
+                <inline-svg
+                  title="Hapus"
+                  :src="`${$baseUrl}media/svg/icons/Home/Trash.svg`"
+                >
+                </inline-svg>
+              </span>
             </button>
           </span>
         </li>
@@ -171,7 +177,13 @@
                 title="Hapus"
                 @click="removeAttachment(index)"
               >
-                <BIconTrash font-scale="1"></BIconTrash>
+                <span class="svg-icon svg-icon-dark svg-icon-md">
+                  <inline-svg
+                    title="Hapus"
+                    :src="`${$baseUrl}media/svg/icons/Home/Trash.svg`"
+                  >
+                  </inline-svg>
+                </span>
               </button>
             </span>
           </div>
@@ -215,7 +227,6 @@ import {
   BModal,
   BFormGroup,
   BFormInput,
-  BIconTrash,
   BButton,
   BSpinner,
 } from 'bootstrap-vue'
@@ -251,7 +262,6 @@ export default {
     BFormGroup,
     BFormInput,
     MVSelect2,
-    BIconTrash,
     BButton,
     BSpinner,
   },
