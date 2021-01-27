@@ -5,6 +5,7 @@ import Task from '../views/Task/Task.vue'
 
 import Location from '../views/Location/Location.vue'
 import AssetType from '../views/AssetType/AssetType.vue'
+import Symbol from '../views/Symbol/Symbol.vue'
 
 import Chart from '../views/StaffChart/Chart.vue'
 import OfficeSummary from '../views/OfficeSummary/Summary.vue'
@@ -31,6 +32,11 @@ const routes = [
     path: '/asset-types',
     name: 'Daftar Jenis Aset',
     component: AssetType,
+  },
+  {
+    path: '/symbols',
+    name: 'Simbol',
+    component: Symbol,
   },
 
   {
