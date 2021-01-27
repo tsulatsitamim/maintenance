@@ -1,7 +1,7 @@
 const menus = [
   {
     name: 'Daftar Lokasi',
-    path: '/location',
+    path: '/locations',
     icon: `${process.env.BASE_URL}/media/svg/icons/Map/Marker1.svg`,
   },
   {

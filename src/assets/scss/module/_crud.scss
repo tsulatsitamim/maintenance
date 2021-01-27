@@ -1,0 +1,21 @@
+.image-attachment {
+  display: flex;
+  align-items: start;
+  margin-top: 10px;
+
+  .action {
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 1;
+  }
+}
+
+.img-thumbnail {
+  padding: 0.25rem;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+
+  max-width: 100%;
+  height: auto;
+}
