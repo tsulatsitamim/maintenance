@@ -48,7 +48,7 @@
               >
                 <template #cell(actions)="data">
                   <router-link
-                    :to="`/${data.item.id}/logbooks`"
+                    :to="`/locations/${data.item.id}/logbooks`"
                     class="btn btn-icon btn-text-dark btn-hover-light-dark btn-sm mr-2"
                     title="Logbook"
                   >

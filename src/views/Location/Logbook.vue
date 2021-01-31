@@ -1,7 +1,7 @@
 <template>
   <MVContent>
     <template v-slot:subheader>
-      <MVSubheader title="Logbook">
+      <MVSubheader :title="title">
         <div
           class="input-group input-group-sm input-group-solid max-w-150px my-1 mr-2"
         >
@@ -21,15 +21,6 @@
               </span>
             </span>
           </div>
-        </div>
-        <div class="min-w-150px mr-2">
-          <MVSelect2
-            v-model="location_id"
-            :items="locations"
-            class="form-group-sm form-group-solid"
-            liveSearch
-            last
-          ></MVSelect2>
         </div>
         <a href="#" class="btn btn-light-primary font-weight-bolder btn-sm"
           >Baru</a
@@ -137,7 +128,6 @@
 
 <script>
 import { BCard, BTable, BPagination, BFormSelect } from 'bootstrap-vue'
-import { MVSelect2 } from 'metronic-vue'
 import axios from 'axios'
 import { debounce } from 'debounce'
 import moment from 'moment'
@@ -149,7 +139,6 @@ export default {
     BTable,
     BPagination,
     BFormSelect,
-    MVSelect2,
   },
   data() {
     return {
@@ -159,11 +148,6 @@ export default {
         {
           label: 'Tanggal',
           key: 'task.due_at',
-          sortable: true,
-        },
-        {
-          label: 'Lokasi',
-          key: 'location.name',
           sortable: true,
         },
         {
@@ -196,17 +180,14 @@ export default {
       },
       assetTypes: [],
       locations: [],
-      location_id: 0,
       loading: false,
+      title: 'Logbook',
     }
   },
   mounted() {
-    this.getLocations()
+    this.getLocation()
   },
   watch: {
-    location_id() {
-      this.refreshTable()
-    },
     filter() {
       this.refreshTableDelay()
     },
@@ -222,7 +203,7 @@ export default {
   methods: {
     async tableProvider(ctx) {
       const url = `/api/v2/maintenance/logbooks?location_id=${
-        this.location_id
+        this.$route.params.id
       }&location=true&page=${ctx.currentPage}&per_page=${ctx.perPage}&sortBy=${
         ctx.sortBy
       }&order=${ctx.sortDesc ? 'desc' : 'asc'}&filter=${this.filter}`
@@ -239,17 +220,6 @@ export default {
         console.log(error)
         return []
       }
-    },
-
-    async getLocations() {
-      const { data } = await axios.get('/api/v2/maintenance/locations')
-      this.locations = [
-        { id: 0, name: 'Semua' },
-        ...data.data.map(x => ({
-          id: x.id,
-          name: x.name,
-        })),
-      ]
     },
 
     refreshTable() {
@@ -272,6 +242,13 @@ export default {
           this.$toast(error, 'danger')
         }
       }
+    },
+
+    async getLocation() {
+      const { data } = await axios.get(
+        `/api/v2/maintenance/locations/${this.$route.params.id}`
+      )
+      this.title = `Logbook - ${data.name}`
     },
   },
 }
