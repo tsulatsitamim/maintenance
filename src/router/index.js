@@ -7,6 +7,7 @@ import LocationLogbook from '../views/Location/Logbook.vue'
 import AssetType from '../views/AssetType/AssetType.vue'
 import Symbol from '../views/Symbol/Symbol.vue'
 import Logbook from '../views/Logbook/Logbook.vue'
+import LogbookCrud from '../views/Logbook/LogbookCrud.vue'
 
 import store from '../store/index'
 
@@ -28,6 +29,11 @@ const routes = [
     component: LocationLogbook,
   },
   {
+    path: '/locations/:locationId/logbooks/:id',
+    name: 'Logbook Lokasi Item',
+    component: LogbookCrud,
+  },
+  {
     path: '/asset-types',
     name: 'Daftar Jenis Aset',
     component: AssetType,
@@ -41,6 +47,11 @@ const routes = [
     path: '/logbooks',
     name: 'Logbook',
     component: Logbook,
+  },
+  {
+    path: '/logbooks/:id',
+    name: 'Logbook Item',
+    component: LogbookCrud,
   },
 ]
 

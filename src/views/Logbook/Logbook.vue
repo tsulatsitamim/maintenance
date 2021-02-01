@@ -78,7 +78,7 @@
                     </span>
                   </a>
                   <router-link
-                    :to="`${$baseUrl}logbooks/${data.item.id}`"
+                    :to="`/logbooks/${data.item.id}`"
                     class="btn btn-icon btn-text-dark btn-hover-light-dark btn-sm mr-2"
                     title="Edit"
                   >
