@@ -9,6 +9,7 @@
       placeholder="Pilih lokasi logbook"
       liveSearch
       tags
+      @input="$emit('location-updated', $event, task.due_at)"
     ></MVSelect2>
 
     <MVSelect2
@@ -236,27 +237,6 @@ import CKEditor from '@ckeditor/ckeditor5-vue2'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import jsonToFormData from 'json-form-data'
 
-const emptyTask = {
-  id: null,
-  description: null,
-  due_at: new Date(),
-  end_at: new Date(),
-  report: null,
-  letter_number: null,
-  location_id: null,
-  location: null,
-  task_location: '',
-  status: 'Baik',
-  members: [],
-  attachments: [],
-  logbook_items: [],
-
-  goal_id: null,
-  goal_period: new Date(),
-  volume: 1,
-  goal: {},
-}
-
 export default {
   name: 'TaskCrud',
   components: {
@@ -393,7 +373,6 @@ export default {
       )
 
       if (assignor) {
-        emptyTask.assignor_id = assignor.id
         this.task.assignor_id = assignor.id
       }
     },
@@ -424,6 +403,7 @@ export default {
       ) {
         this.task.end_at = dueAt
       }
+      this.$emit('location-updated', this.task.location_id, dueAt)
     },
     updateTaskDue(endAt) {
       if (

@@ -22,9 +22,13 @@
             </span>
           </div>
         </div>
-        <a href="#" class="btn btn-light-primary font-weight-bolder btn-sm"
-          >Baru</a
+        <router-link
+          :to="`/locations/${$route.params.id}/logbooks/0`"
+          class="btn btn-light-primary font-weight-bolder btn-sm"
+          title="Baru"
         >
+          Baru
+        </router-link>
       </MVSubheader>
     </template>
     <div class="home">

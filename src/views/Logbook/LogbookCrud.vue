@@ -23,7 +23,11 @@
       <div class="row">
         <div class="col-12">
           <b-card>
-            <TaskCrud ref="taskCrud" :taskGoalUserId="authUser.id"></TaskCrud>
+            <TaskCrud
+              ref="taskCrud"
+              :taskGoalUserId="authUser.id"
+              @location-updated="updateAssets"
+            ></TaskCrud>
             <BTableSimple responsive striped>
               <thead>
                 <tr>
@@ -122,16 +126,24 @@ export default {
     }
   },
   async mounted() {
-    await this.getLogbook()
+    if (Number(this.$route.params.id)) {
+      await this.getLogbook(this.$route.params.id)
+    }
+    if (Number(this.$route.params.locationId)) {
+      this.getAssets(
+        this.$route.params.locationId,
+        moment().format('YYYY-MM-DD')
+      )
+    }
   },
   watch: {},
   computed: {
     ...mapGetters(['authUser']),
   },
   methods: {
-    async getLogbook() {
+    async getLogbook(id) {
       const { data } = await axios.get(
-        `/api/v2/maintenance/logbooks/${this.$route.params.id}?task_goal_user_id=${this.authUser.id}`
+        `/api/v2/maintenance/logbooks/${id}?task_goal_user_id=${this.authUser.id}`
       )
       this.title = `Logbook - ${data.location.name}`
       this.editedItem.logbook_items = data.logbook_items
@@ -163,6 +175,11 @@ export default {
       })
 
       await this.getAssets(data.location.id, data.task.due_at.substr(0, 10))
+    },
+
+    updateAssets(locationId, dueAt) {
+      console.log(locationId, dueAt)
+      this.getAssets(locationId, moment(dueAt).format('YYYY-MM-DD'))
     },
 
     async getAssets(locationId, logDate) {
@@ -199,8 +216,8 @@ export default {
 
     async save() {
       const task = this.$refs.taskCrud.getEditedTask()
-      if (!task.location) {
-        return alert('Lokasi harus di isi!')
+      if (!task.task_location) {
+        return alert('Lokasi petugas harus di isi!')
       }
       if (!task.members.length) {
         return alert('Personil harus di isi!')
@@ -258,11 +275,27 @@ export default {
             },
           })
         } else {
-          await axios.post(`/api/v2/maintenance/logbooks`, form, {
-            onUploadProgress(event) {
-              vm.uploadProgress = Math.round((event.loaded * 100) / event.total)
-            },
-          })
+          const { data } = await axios.post(
+            `/api/v2/maintenance/logbooks`,
+            form,
+            {
+              onUploadProgress(event) {
+                vm.uploadProgress = Math.round(
+                  (event.loaded * 100) / event.total
+                )
+              },
+            }
+          )
+
+          if (this.$route.params.locationId) {
+            this.$router.push(
+              `/locations/${this.$route.params.locationId}/logbooks/${data.id}`
+            )
+          } else {
+            this.$router.push(`/logbooks/${data.id}`)
+          }
+
+          this.getLogbook(data.id)
         }
         this.$toast('Logbook berhasil disimpan.')
       } catch (error) {
