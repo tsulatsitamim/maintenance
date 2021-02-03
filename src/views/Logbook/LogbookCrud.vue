@@ -37,14 +37,23 @@
                   <th>Tindakan</th>
                   <th>Kondisi Setelah</th>
                   <th>Keterangan</th>
+                  <th>Lampiran</th>
+                  <th class="text-center">
+                    <span class="svg-icon svg-icon-dark svg-icon-sm">
+                      <inline-svg
+                        :src="`${$baseUrl}media/svg/icons/Files/Upload.svg`"
+                      >
+                      </inline-svg>
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <template v-for="group in Object.keys(assets).sort()">
                   <tr :key="group">
-                    <th colspan="6" class="text-dark">{{ group }}</th>
+                    <th colspan="8" class="text-dark">{{ group }}</th>
                   </tr>
-                  <tr v-for="asset in assets[group]" :key="asset.id">
+                  <tr v-for="(asset, i) in assets[group]" :key="asset.id">
                     <td class="align-middle">{{ asset.name }}</td>
                     <td class="align-middle">{{ asset.code }}</td>
                     <td class="align-middle">{{ asset.prev_status }}</td>
@@ -68,6 +77,53 @@
                         size="sm"
                       ></b-form-input>
                     </td>
+                    <td class="py-0 align-middle">
+                      <ul>
+                        <li
+                          v-for="attachment in asset.attachments"
+                          :key="attachment.path"
+                        >
+                          <a
+                            :href="`/auth-storage/${attachment.path}`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {{ attachment.name }}
+                          </a>
+                          <button
+                            class="btn btn-icon btn-text-dark btn-hover-light-dark btn-xs"
+                            title="Hapus"
+                            @click="removeAttachment(group, i)"
+                          >
+                            <span class="svg-icon svg-icon-xs">
+                              <inline-svg
+                                title="Hapus"
+                                :src="
+                                  `${$baseUrl}media/svg/icons/Home/Trash.svg`
+                                "
+                              >
+                              </inline-svg>
+                            </span>
+                          </button>
+                        </li>
+                      </ul>
+                    </td>
+                    <td class="py-0 align-middle">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-text-dark btn-hover-light-dark btn-icon ml-3"
+                        title="Upload"
+                        @click="openUploadForm(group, i)"
+                      >
+                        <span class="svg-icon svg-icon-dark svg-icon-sm">
+                          <inline-svg
+                            title="Upload"
+                            :src="`${$baseUrl}media/svg/icons/Files/Upload.svg`"
+                          >
+                          </inline-svg>
+                        </span>
+                      </button>
+                    </td>
                   </tr>
                 </template>
               </tbody>
@@ -76,6 +132,12 @@
         </div>
       </div>
     </div>
+    <input
+      ref="upload"
+      type="file"
+      class="d-none"
+      @change="addAttachment($event)"
+    />
   </MVContent>
 </template>
 
@@ -106,6 +168,7 @@ export default {
     BSpinner,
     // BProgress,
   },
+  filters: {},
   data() {
     return {
       editedItem: {
@@ -123,6 +186,8 @@ export default {
         'Pemasangan',
       ],
       uploadProgress: 0,
+      logbookItemKey: '',
+      logbookItemIndex: 0,
     }
   },
   async mounted() {
@@ -141,6 +206,11 @@ export default {
     ...mapGetters(['authUser']),
   },
   methods: {
+    openUploadForm(key, index) {
+      this.logbookItemKey = key
+      this.logbookItemIndex = index
+      this.$refs.upload.click()
+    },
     async getLogbook(id) {
       const { data } = await axios.get(
         `/api/v2/maintenance/logbooks/${id}?task_goal_user_id=${this.authUser.id}`
@@ -209,6 +279,8 @@ export default {
         note: logs[x.id] ? logs[x.id].note : null,
         status: logs[x.id] ? logs[x.id].status : null,
         type: 'Pengecekan',
+        attachments:
+          logs[x.id] && logs[x.id].attachments ? logs[x.id].attachments : [],
       }))
 
       this.assets = groupBy(x => x.group, assets)
@@ -235,6 +307,8 @@ export default {
           type: x.type,
           status: x.status,
           note: x.note,
+          attachments: x.attachments.filter(attachment => !attachment.file),
+          new_attachments: x.attachments.filter(attachment => attachment.file),
         }))
 
       const payload = {
@@ -310,6 +384,30 @@ export default {
           ? `/locations/${this.$route.params.locationId}/logbooks`
           : `/logbooks`
       )
+    },
+
+    addAttachment(e, type) {
+      const file = e.target.files[0]
+      const is_image = /\.(jpe?g|png|gif|bmp|webp)$/i.test(file.name)
+
+      const FR = new FileReader()
+      FR.addEventListener('load', ({ target }) => {
+        this.assets[this.logbookItemKey][
+          this.logbookItemIndex
+        ].attachments.push({
+          id: Date.now(),
+          name: file.name,
+          path: target.result,
+          is_image,
+          file,
+          type,
+        })
+      })
+
+      return FR.readAsDataURL(file)
+    },
+    removeAttachment(key, index) {
+      this.assets[key][index].attachments.splice(index, 1)
     },
   },
 }

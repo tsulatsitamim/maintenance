@@ -546,7 +546,6 @@ export default {
               },
             }
           )
-          // this.task = taskMapper(data)
           this.$emit('task-updated', data)
         } else {
           const { data } = await Axios.post(`/api/v2/tasks`, form, {
