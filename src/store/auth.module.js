@@ -11,10 +11,14 @@ const state = {
 
 const getters = {
   authUser({ user }) {
+    if (!user.id) {
+      return {}
+    }
     return {
       id: user.id,
       name: user.name,
       position_id: user.department_position_id,
+      position_name: user.department_position.name,
       role_ids: user.roles.map(x => x.name),
     }
   },

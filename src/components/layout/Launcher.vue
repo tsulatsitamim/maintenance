@@ -48,13 +48,18 @@
 
 <script>
 import { BDropdownText, BDropdown } from 'bootstrap-vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Launcher',
   components: { BDropdownText, BDropdown },
   data() {
-    return {
-      launchers: [
+    return {}
+  },
+  computed: {
+    ...mapGetters(['authUser']),
+    launchers() {
+      return [
         {
           name: 'File Manager',
           icon: `${this.$baseUrl}/icon/launcher/file.svg`,
@@ -65,6 +70,11 @@ export default {
           name: 'Data Entry',
           icon: `${this.$baseUrl}/icon/launcher/report.svg`,
           link: '/data-entry',
+          hidden: ![
+            'ka-seksi-merapi',
+            'staf-seksi-merapi',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
         {
           name: 'Assignment',
@@ -75,21 +85,41 @@ export default {
           name: 'Data Analysis',
           icon: `${this.$baseUrl}/icon/launcher/analytic.svg`,
           link: '/data-analysis',
+          hidden: ![
+            'ka-seksi-merapi',
+            'staf-seksi-merapi',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
         {
           name: 'Display Device',
           icon: `${this.$baseUrl}/icon/launcher/display.svg`,
           link: '/display-device',
+          hidden: ![
+            'ka-seksi-merapi',
+            'staf-seksi-merapi',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
         {
           name: 'Maintenance',
           icon: `${this.$baseUrl}/icon/launcher/maintenance.svg`,
           link: '/maintenance',
+          hidden: ![
+            'ka-seksi-merapi',
+            'staf-seksi-merapi',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
         {
           name: 'Broadcast',
           icon: `${this.$baseUrl}/icon/launcher/broadcast.jpg`,
           link: '/broadcasting',
+          hidden: ![
+            'ka-seksi-merapi',
+            'staf-seksi-merapi',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
         {
           name: 'Gallery',
@@ -100,10 +130,15 @@ export default {
           name: 'LIMS',
           icon: `${this.$baseUrl}/icon/launcher/beaker.png`,
           link: '/lims',
-          hidden: true,
+          hidden: ![
+            'ka-seksi-pl',
+            'staf-seksi-pl',
+            'ka-bpptkg',
+            'ka-bpptkg',
+          ].includes(this.authUser.position_name),
         },
-      ],
-    }
+      ]
+    },
   },
 }
 </script>
