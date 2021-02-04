@@ -26,7 +26,7 @@
           href="#"
           class="btn btn-light-primary font-weight-bolder btn-sm"
           @click="$refs.locationCrud.create()"
-          >Baru</a
+          >Buat Lokasi</a
         >
       </MVSubheader>
     </template>

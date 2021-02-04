@@ -25,9 +25,9 @@
         <router-link
           :to="`/locations/${$route.params.id}/logbooks/0`"
           class="btn btn-light-primary font-weight-bolder btn-sm"
-          title="Baru"
+          title="Buat Logbook"
         >
-          Baru
+          Buat Logbook
         </router-link>
       </MVSubheader>
     </template>

@@ -36,7 +36,7 @@
           href="#"
           class="btn btn-light-primary font-weight-bolder btn-sm"
           @click="$refs.assetTypeCrud.create()"
-          >Baru</a
+          >Buat Jenis Aset</a
         >
       </MVSubheader>
     </template>

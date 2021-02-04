@@ -36,7 +36,7 @@
           class="btn btn-light-primary font-weight-bolder btn-sm"
           title="Baru"
         >
-          Baru
+          Buat Logbook
         </router-link>
       </MVSubheader>
     </template>
