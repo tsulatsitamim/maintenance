@@ -159,6 +159,9 @@ export default {
       title: 'Daftar Aset',
     }
   },
+  beforeDestroy() {
+    window.Echo.leaveChannel('private-asset')
+  },
   mounted() {
     this.getLocation()
     this.getAssets()
