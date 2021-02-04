@@ -2,6 +2,23 @@
   <MVContent>
     <template v-slot:subheader>
       <MVSubheader title="Daftar Lokasi">
+        <b-dropdown
+          toggle-class="btn-light-primary font-weight-bolder btn-sm"
+          class="mr-2"
+        >
+          <template #button-content>
+            <span class="svg-icon mr-0">
+              <inline-svg
+                title="Rekap"
+                :src="`${$baseUrl}icon/xlsx.svg`"
+              ></inline-svg>
+            </span>
+          </template>
+          <b-dropdown-item href="/api/v2/maintenance/locations?export=standard"
+            >Rekap Standar</b-dropdown-item
+          >
+        </b-dropdown>
+
         <div
           class="input-group input-group-sm input-group-solid max-w-150px my-1 mr-2"
         >
@@ -139,7 +156,14 @@
 </template>
 
 <script>
-import { BCard, BTable, BPagination, BFormSelect } from 'bootstrap-vue'
+import {
+  BCard,
+  BTable,
+  BPagination,
+  BFormSelect,
+  BDropdown,
+  BDropdownItem,
+} from 'bootstrap-vue'
 import axios from 'axios'
 import LocationCrud from './LocationCrud'
 
@@ -151,6 +175,8 @@ export default {
     BPagination,
     BFormSelect,
     LocationCrud,
+    BDropdown,
+    BDropdownItem,
   },
   data() {
     return {
@@ -196,6 +222,7 @@ export default {
       },
       locations: [],
       loading: false,
+      xlsxUrlStandar: '#',
     }
   },
   mounted() {
