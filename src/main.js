@@ -11,6 +11,7 @@ import { InlineSvgPlugin } from 'vue-inline-svg'
 import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import PortalVue from 'portal-vue'
 import Toast from './utils/toast'
+import './utils/echo'
 
 import PS from 'perfect-scrollbar'
 import { UPDATE_USER } from './store/auth.module'

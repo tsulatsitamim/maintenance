@@ -61,7 +61,7 @@
                     </span>
                   </router-link>
                   <router-link
-                    :to="`/${data.item.id}/assets`"
+                    :to="`/locations/${data.item.id}/assets`"
                     class="btn btn-icon btn-text-dark btn-hover-light-dark btn-sm mr-2"
                     title="Aset"
                   >

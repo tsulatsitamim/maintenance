@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import { isHasAccess } from 'metronic-vue'
 
 import Location from '../views/Location/Location.vue'
+import LocationAsset from '../views/Location/Asset/Asset.vue'
 import LocationLogbook from '../views/Location/Logbook.vue'
 import AssetType from '../views/AssetType/AssetType.vue'
 import Symbol from '../views/Symbol/Symbol.vue'
@@ -27,6 +28,11 @@ const routes = [
     path: '/locations/:id/logbooks',
     name: 'Daftar Logbook Lokasi',
     component: LocationLogbook,
+  },
+  {
+    path: '/locations/:id/assets',
+    name: 'Daftar Aset Lokasi',
+    component: LocationAsset,
   },
   {
     path: '/locations/:locationId/logbooks/:id',
