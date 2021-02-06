@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { isHasAccess } from 'metronic-vue'
 
+import Map from '../views/Map/Map.vue'
 import Location from '../views/Location/Location.vue'
 import LocationAsset from '../views/Location/Asset/Asset.vue'
 import LocationLogbook from '../views/Location/Logbook.vue'
@@ -17,7 +18,12 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/locations',
+    redirect: '/map',
+  },
+  {
+    path: '/map',
+    name: 'Peta',
+    component: Map,
   },
   {
     path: '/locations',

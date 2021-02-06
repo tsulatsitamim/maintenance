@@ -1,5 +1,10 @@
 const menus = [
   {
+    name: 'Peta',
+    path: '/map',
+    icon: `${process.env.BASE_URL}/media/svg/icons/Map/Direction2.svg`,
+  },
+  {
     name: 'Daftar Lokasi',
     path: '/locations',
     icon: `${process.env.BASE_URL}/media/svg/icons/Map/Marker1.svg`,
@@ -18,7 +23,6 @@ const menus = [
     name: 'Simbol',
     path: '/symbols',
     icon: `${process.env.BASE_URL}/media/svg/icons/General/Settings-2.svg`,
-    position_ids: [1, 2, 3, 4, 5],
   },
 ]
 
