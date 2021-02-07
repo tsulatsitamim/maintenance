@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { assetMapper, locationMapper } from './dataMapper'
 
-const min = 0.999999
-const max = 1.000001
-const randomNumber = () =>
+export const min = 0.999999
+export const max = 1.000001
+export const randomNumber = () =>
   (Math.random() < 0.5 ? -1 : 1) *
   (Math.random() * (0.000005 - 0.000001) + 0.000001)
 

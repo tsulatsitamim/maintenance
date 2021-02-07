@@ -7,28 +7,20 @@ export const populateInfoWindow = (map, marker, infowindow) => {
 
   const locationtLinks = `
     <div class="view-link mt-3">
-      <a target="_blank" href="/maintenance/locations/${
-        marker.properties.id
-      }/logbooks">Logbook</a>
-      <a class="ml-2" target="_blank" href="/maintenance/locations/${
-        marker.properties.id
-      }/assets">Aset</a>
-      <a class="ml-2 edit-action" target="_blank" href="#" data-type="location" data-properties='${JSON.stringify(
-        marker.properties
-      )}'>Edit</a>
+      <a target="_blank" href="${process.env.BASE_URL}locations/${marker.properties.id}/logbooks">Logbook</a>
+      <a class="ml-2" target="_blank" href="${process.env.BASE_URL}locations/${marker.properties.id}/assets">Aset</a>
+      <a class="ml-2 edit-action" target="_blank" href="#" data-type="location" data-id="${marker.properties.id}">Edit</a>
     </div>`
 
   const assetLinks = `
     <div class="view-link mt-3">
-      <a class="ml-2 edit-action" target="_blank" href="#" data-type="asset" data-properties='${JSON.stringify(
-        marker.properties
-      )}'>Edit</a>
+      <a class="ml-2 edit-action" target="_blank" href="#" data-type="asset" data-id="${
+        marker.properties.id
+      }">Edit</a>
       ${
         marker.properties.ip
           ? `
-      <a class="ml-2 refresh-action" target="_blank" href="#" data-type="asset" data-properties='${JSON.stringify(
-        marker.properties
-      )}'>Refresh</a>
+      <a class="ml-2 refresh-action" target="_blank" href="#" data-type="asset" data-id="${marker.properties.id}">Refresh</a>
       <div id="refresh-spinner" class="d-none ml-3 spinner-border spinner-border-sm text-primary" role="status">
         <span class="sr-only">Loading...</span>
       </div>

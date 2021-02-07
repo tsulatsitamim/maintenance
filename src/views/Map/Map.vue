@@ -123,6 +123,11 @@
         </div>
       </div>
     </div>
+    <LocationCrud
+      ref="locationCrud"
+      @location-updated="locationUpdated"
+    ></LocationCrud>
+    <AssetCrud ref="assetCrud" @asset-updated="assetUpdated"></AssetCrud>
   </MVContent>
 </template>
 
@@ -134,6 +139,9 @@ import {
   getLocationMarkers,
   getAssetMarkers,
   getLinks,
+  randomNumber,
+  max,
+  min,
 } from './dataProvider'
 import initGoogleMapLib from './initGoogleMapLib'
 import { initLinks, initMap, updateCluster } from './map'
@@ -141,8 +149,10 @@ import { debounce } from 'debounce'
 import LogStatus from './LogStatus'
 import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
 import populateInfoWindow from './populateInfoWindow'
-
-// TODO: update infowindow functionality
+import LocationCrud from '../Location/LocationCrud'
+import AssetCrud from '../Location/Asset/AssetCrud'
+import { assetMapper, locationMapper } from './dataMapper'
+import axios from 'axios'
 
 export default {
   name: 'Map',
@@ -150,6 +160,8 @@ export default {
     BDropdown,
     BDropdownForm,
     LogStatus,
+    LocationCrud,
+    AssetCrud,
   },
   data() {
     return {
@@ -159,6 +171,9 @@ export default {
       assetTypes: [],
       markers: [],
       links: [],
+
+      locations: [],
+      assets: [],
 
       map: null,
       mapMarkers: [],
@@ -220,6 +235,7 @@ export default {
     )
 
     this.listenAssetUpdate()
+    this.addInfoWindowEventListener()
   },
   watch: {
     allLinks() {
@@ -315,7 +331,7 @@ export default {
       )
     },
     updateAssetStatus(id, is_online) {
-      const index = this.markers.findIndex(
+      const index = this.mapMarkers.findIndex(
         marker =>
           marker.properties.id === id && marker.properties.type === 'asset'
       )
@@ -325,18 +341,18 @@ export default {
       }
 
       const isShortPeriod = [10, 13].includes(
-        this.markers[index].properties.asset_type_id
+        this.mapMarkers[index].properties.asset_type_id
       )
 
       if (!isShortPeriod) {
         if (is_online) {
-          const icon = this.markers[index].icon.replace('bermasalah', 'baik')
-          this.markers[index].setIcon(icon)
+          const icon = this.mapMarkers[index].icon.replace('bermasalah', 'baik')
+          this.mapMarkers[index].setIcon(icon)
         } else {
-          const icon = this.markers[index].icon.replace('baik', 'bermasalah')
-          this.markers[index].setIcon(icon)
+          const icon = this.mapMarkers[index].icon.replace('baik', 'bermasalah')
+          this.mapMarkers[index].setIcon(icon)
         }
-        this.markers[index].properties.is_online = is_online
+        this.mapMarkers[index].properties.is_online = is_online
       }
 
       if (
@@ -345,7 +361,80 @@ export default {
         this.infowindow.anchor.properties.id === id &&
         this.infowindow.anchor.properties.type === 'asset'
       ) {
-        populateInfoWindow(this.map, this.markers[index], this.infowindow)
+        populateInfoWindow(this.map, this.mapMarkers[index], this.infowindow)
+      }
+    },
+    infoWindowHandler(e) {
+      if (e.target.classList.contains('edit-action')) {
+        e.preventDefault()
+
+        if (e.target.dataset.type === 'location') {
+          this.$refs.locationCrud.edit({ id: e.target.dataset.id })
+        }
+
+        if (e.target.dataset.type === 'asset') {
+          this.$refs.assetCrud.edit({ id: e.target.dataset.id })
+        }
+
+        return
+      }
+
+      if (e.target.classList.contains('refresh-action')) {
+        e.preventDefault()
+        this.refreshAssetStatus(e)
+      }
+    },
+    addInfoWindowEventListener() {
+      document
+        .getElementById('map')
+        .addEventListener('click', this.infoWindowHandler)
+    },
+    locationUpdated(location) {
+      const index = this.mapMarkers.findIndex(
+        marker =>
+          marker.properties.id === location.id &&
+          marker.properties.type === 'location'
+      )
+      if (index !== -1) {
+        this.mapMarkers[index].properties = locationMapper(location)
+        this.mapMarkers[index].setPosition({
+          lat: Number(location.lat) + randomNumber(),
+          lng: Number(location.lng) + randomNumber(),
+        })
+      }
+    },
+    assetUpdated(asset) {
+      const index = this.mapMarkers.findIndex(
+        marker =>
+          marker.properties.id === asset.id &&
+          marker.properties.type === 'asset'
+      )
+      if (index !== -1) {
+        this.mapMarkers[index].properties = assetMapper(asset)
+        this.mapMarkers[index].setPosition({
+          lat: Number(asset.lat) * (Math.random() * (max - min) + min),
+          lng: Number(asset.lng) * (Math.random() * (max - min) + min),
+        })
+      }
+    },
+    async refreshAssetStatus(e) {
+      e.target.classList.add('d-none')
+      const refreshElement = document.getElementById('refresh-spinner')
+      if (refreshElement) {
+        refreshElement.classList.remove('d-none')
+      }
+
+      try {
+        const { data } = await axios.get(
+          `/api/v2/maintenance/assets/${e.target.dataset.id}?ping=true`
+        )
+        this.updateAssetStatus(data.id, data.is_online)
+        if (refreshElement) {
+          refreshElement.classList.add('d-none')
+        }
+        e.target.classList.remove('d-none')
+      } catch (error) {
+        console.log(error)
       }
     },
   },
