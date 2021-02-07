@@ -78,3 +78,18 @@ export const initMap = async (el, locations) => {
 
   return { map, markers }
 }
+
+export const initLinks = links =>
+  links.map(
+    link =>
+      new window.google.maps.Polyline({
+        path: [
+          { lat: Number(link.from.lat), lng: Number(link.from.lng) },
+          { lat: Number(link.to.lat), lng: Number(link.to.lng) },
+        ],
+        geodesic: true,
+        strokeColor: link.is_online ? '#0000dd' : '#ff0000',
+        strokeOpacity: 0.5,
+        strokeWeight: 1,
+      })
+  )

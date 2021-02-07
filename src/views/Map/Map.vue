@@ -93,7 +93,7 @@
         >
           <b-dropdown-form>
             <label class="checkbox checkbox-outline min-w-140px mb-2">
-              <input v-model="allNetworks" type="checkbox" name="semua" />
+              <input v-model="allLinks" type="checkbox" name="semua" />
               <span class="mr-2"></span>
               Semua
             </label>
@@ -136,13 +136,12 @@ import {
   getLinks,
 } from './dataProvider'
 import initGoogleMapLib from './initGoogleMapLib'
-import { initMap, updateCluster } from './map'
+import { initLinks, initMap, updateCluster } from './map'
 import { debounce } from 'debounce'
 import LogStatus from './LogStatus'
 import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
 
 // TODO: update status laravel echo
-// TODO: fix tampilkan icon lokasi
 // TODO: update infowindow functionality
 
 export default {
@@ -168,7 +167,7 @@ export default {
       showLocations: true,
       allLocationTypes: true,
       allAssetTypes: false,
-      allNetworks: false,
+      allLinks: false,
 
       assetLog: {
         good: 0,
@@ -202,8 +201,8 @@ export default {
     window.google = google
     this.locationTypes = locationTypes
     this.assetTypes = assetTypes
-    this.links = links
     this.markers = [...locationMarkers, ...assetMarkers]
+    this.links = initLinks(links)
 
     const { map, markers } = await initMap(
       document.getElementById('map'),
@@ -221,13 +220,16 @@ export default {
     )
   },
   watch: {
+    allLinks() {
+      this.links.map(x => x.setMap(this.allLinks ? this.map : null))
+    },
+    showLocations() {
+      this.updateMarkersVisibility()
+    },
     filter: {
       handler: debounce(function() {
         this.updateMarkersVisibility()
       }, 600),
-    },
-    showLocations() {
-      this.updateMarkersVisibility()
     },
     locationTypes: {
       handler() {

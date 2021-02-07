@@ -80,21 +80,7 @@ export const getAssetMarkers = async () => {
 
 export const getLinks = async () => {
   const { data } = await axios.get(`/api/v2/maintenance/location-links`)
-  return data
-    .filter(
-      link => link.from.lat && link.from.lng && link.to.lat && link.to.lng
-    )
-    .map(
-      link =>
-        new window.google.maps.Polyline({
-          path: [
-            { lat: Number(link.from.lat), lng: Number(link.from.lng) },
-            { lat: Number(link.to.lat), lng: Number(link.to.lng) },
-          ],
-          geodesic: true,
-          strokeColor: link.is_online ? '#0000dd' : '#ff0000',
-          strokeOpacity: 0.5,
-          strokeWeight: 1,
-        })
-    )
+  return data.filter(
+    link => link.from.lat && link.from.lng && link.to.lat && link.to.lng
+  )
 }
