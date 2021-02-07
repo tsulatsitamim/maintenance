@@ -140,8 +140,8 @@ import { initLinks, initMap, updateCluster } from './map'
 import { debounce } from 'debounce'
 import LogStatus from './LogStatus'
 import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
+import populateInfoWindow from './populateInfoWindow'
 
-// TODO: update status laravel echo
 // TODO: update infowindow functionality
 
 export default {
@@ -218,6 +218,8 @@ export default {
     map.controls[window.google.maps.ControlPosition.LEFT_BOTTOM].push(
       document.getElementById('legend')
     )
+
+    this.listenAssetUpdate()
   },
   watch: {
     allLinks() {
@@ -303,6 +305,48 @@ export default {
     updateLegend() {
       this.locationLog = updateLocationLogStatus(this.mapMarkers)
       this.assetLog = updateAssetLogStatus(this.mapMarkers, this.assetTypes)
+    },
+    listenAssetUpdate() {
+      window.Echo.private(`asset`).listen(
+        '.App\\Events\\Maintenance\\AssetIsOnlineUpdated',
+        ({ id, is_online }) => {
+          this.updateAssetStatus(id, is_online)
+        }
+      )
+    },
+    updateAssetStatus(id, is_online) {
+      const index = this.markers.findIndex(
+        marker =>
+          marker.properties.id === id && marker.properties.type === 'asset'
+      )
+
+      if (index === -1) {
+        return
+      }
+
+      const isShortPeriod = [10, 13].includes(
+        this.markers[index].properties.asset_type_id
+      )
+
+      if (!isShortPeriod) {
+        if (is_online) {
+          const icon = this.markers[index].icon.replace('bermasalah', 'baik')
+          this.markers[index].setIcon(icon)
+        } else {
+          const icon = this.markers[index].icon.replace('baik', 'bermasalah')
+          this.markers[index].setIcon(icon)
+        }
+        this.markers[index].properties.is_online = is_online
+      }
+
+      if (
+        this.infowindow &&
+        this.infowindow.anchor &&
+        this.infowindow.anchor.properties.id === id &&
+        this.infowindow.anchor.properties.type === 'asset'
+      ) {
+        populateInfoWindow(this.map, this.markers[index], this.infowindow)
+      }
     },
   },
 }
