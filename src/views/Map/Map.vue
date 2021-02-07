@@ -142,7 +142,7 @@ import LogStatus from './LogStatus'
 import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
 
 // TODO: update status laravel echo
-// TODO: merge watcher handler
+// TODO: fix tampilkan icon lokasi
 // TODO: fix tampilkan icon lokasi
 // TODO: update infowindow functionality
 export default {
@@ -222,30 +222,7 @@ export default {
   watch: {
     filter: {
       handler: debounce(function() {
-        const locationTypes = this.locationTypes
-          .filter(x => x.show)
-          .map(x => x.name)
-        const assetTypes = this.assetTypes.filter(x => x.show).map(x => x.name)
-
-        this.mapMarkers = this.mapMarkers.map(x => {
-          const filter = this.filter || ''
-          const isVisible =
-            (locationTypes.includes(x.properties.location_type) ||
-              assetTypes.includes(x.properties.method)) &&
-            ((x.properties.title &&
-              x.properties.title.toLowerCase().includes(filter)) ||
-              (x.properties.description &&
-                x.properties.description.toLowerCase().includes(filter)))
-
-          x.setMap(isVisible ? this.map : null)
-          x.properties.visible = !!isVisible
-          x.setVisible(!!isVisible)
-
-          return x
-        })
-
-        this.updateLegend()
-        this.updateCluster()
+        this.updateMarkersVisibility()
       }, 600),
     },
     showLocations: {
@@ -275,55 +252,65 @@ export default {
     },
     locationTypes: {
       handler() {
-        this.allLocationTypes = !this.locationTypes.some(x => !x.show)
-
-        const locationTypes = this.locationTypes
-          .filter(x => x.show)
-          .map(x => x.name)
-        this.mapMarkers = this.mapMarkers.map(x => {
-          if (x.properties.type !== 'location') {
-            return x
-          }
-
-          const isVisible = locationTypes.includes(x.properties.location_type)
-          x.setMap(isVisible ? this.map : null)
-          x.properties.visible = isVisible
-          x.setVisible(isVisible)
-
-          return x
-        })
-
-        this.updateLegend()
-        this.updateCluster()
+        this.updateMarkersVisibility()
       },
       deep: true,
     },
     assetTypes: {
       handler() {
-        this.allAssetTypes = !this.assetTypes.some(x => !x.show)
-
-        const assetTypes = this.assetTypes.filter(x => x.show).map(x => x.name)
-        this.mapMarkers = this.mapMarkers.map(x => {
-          if (x.properties.type !== 'asset') {
-            return x
-          }
-
-          const isVisible = assetTypes.includes(x.properties.method)
-          x.setMap(isVisible ? this.map : null)
-          x.properties.visible = isVisible
-          x.setVisible(isVisible)
-
-          return x
-        })
-
-        this.updateLegend()
-        this.updateCluster()
+        this.updateMarkersVisibility()
       },
       deep: true,
     },
   },
   computed: {},
   methods: {
+    updateMarkersVisibility() {
+      this.allLocationTypes = !this.locationTypes.some(x => !x.show)
+      const locationTypes = this.locationTypes
+        .filter(x => x.show)
+        .map(x => x.name)
+
+      this.allAssetTypes = !this.assetTypes.some(x => !x.show)
+      const assetTypes = this.assetTypes.filter(x => x.show).map(x => x.name)
+
+      const filter = this.filter ? this.filter.toLowerCase() : ''
+
+      this.mapMarkers = this.mapMarkers.map(x => {
+        if (x.properties.type === 'location') {
+          const isVisible =
+            locationTypes.includes(x.properties.location_type) &&
+            ((x.properties.title &&
+              x.properties.title.toLowerCase().includes(filter)) ||
+              (x.properties.description &&
+                x.properties.description.toLowerCase().includes(filter)))
+
+          x.setMap(isVisible ? this.map : null)
+          x.properties.visible = isVisible
+          x.setVisible(isVisible)
+          return x
+        }
+
+        if (x.properties.type === 'asset') {
+          const isVisible =
+            assetTypes.includes(x.properties.method) &&
+            ((x.properties.title &&
+              x.properties.title.toLowerCase().includes(filter)) ||
+              (x.properties.description &&
+                x.properties.description.toLowerCase().includes(filter)))
+
+          x.setMap(isVisible ? this.map : null)
+          x.properties.visible = isVisible
+          x.setVisible(isVisible)
+          return x
+        }
+
+        return x
+      })
+
+      this.updateLegend()
+      this.updateCluster()
+    },
     updateCluster() {
       this.markerClusterer = updateCluster(
         this.map,
