@@ -143,8 +143,9 @@ import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
 
 // TODO: update status laravel echo
 // TODO: fix tampilkan icon lokasi
-// TODO: fix tampilkan icon lokasi
 // TODO: update infowindow functionality
+// TODO: update height to 100%
+
 export default {
   name: 'Logbook',
   components: {
@@ -205,16 +206,17 @@ export default {
     this.links = links
     this.markers = [...locationMarkers, ...assetMarkers]
 
-    const { map, markers, markerClusterer } = await initMap(
+    const { map, markers } = await initMap(
       document.getElementById('map'),
       this.markers
     )
 
     this.map = map
     this.mapMarkers = markers
-    this.markerClusterer = markerClusterer
 
     this.updateLegend()
+    this.updateCluster()
+
     map.controls[window.google.maps.ControlPosition.LEFT_BOTTOM].push(
       document.getElementById('legend')
     )
@@ -225,30 +227,8 @@ export default {
         this.updateMarkersVisibility()
       }, 600),
     },
-    showLocations: {
-      handler() {
-        this.allLocationTypes = !this.locationTypes.some(x => !x.show)
-
-        const locationTypes = this.locationTypes
-          .filter(x => x.show)
-          .map(x => x.name)
-        this.mapMarkers = this.mapMarkers.map(x => {
-          if (x.properties.type !== 'location') {
-            return x
-          }
-
-          const isVisible = locationTypes.includes(x.properties.location_type)
-          x.setMap(isVisible ? this.map : null)
-          x.properties.visible = isVisible
-          x.setVisible(isVisible)
-
-          return x
-        })
-
-        this.updateLegend()
-        this.updateCluster()
-      },
-      deep: true,
+    showLocations() {
+      this.updateMarkersVisibility()
     },
     locationTypes: {
       handler() {
@@ -285,9 +265,9 @@ export default {
               (x.properties.description &&
                 x.properties.description.toLowerCase().includes(filter)))
 
-          x.setMap(isVisible ? this.map : null)
+          x.setMap(this.showLocations && isVisible ? this.map : null)
           x.properties.visible = isVisible
-          x.setVisible(isVisible)
+          x.setVisible(this.showLocations && isVisible)
           return x
         }
 
@@ -315,7 +295,8 @@ export default {
       this.markerClusterer = updateCluster(
         this.map,
         this.mapMarkers,
-        this.markerClusterer
+        this.markerClusterer,
+        this.showLocations
       )
     },
     updateLegend() {

@@ -1,12 +1,21 @@
 import populateInfoWindow from './populateInfoWindow'
 import MarkerClusterer from '@googlemaps/markerclustererplus'
 
-export const updateCluster = (map, markers, markerClusterer = null) => {
+export const updateCluster = (
+  map,
+  markers,
+  markerClusterer = null,
+  showLocations
+) => {
   if (markerClusterer) {
     markerClusterer.clearMarkers()
   }
 
-  const visibleMarkers = markers.filter(x => x.properties.visible)
+  const visibleMarkers = markers.filter(x =>
+    x.properties.type === 'location'
+      ? x.properties.visible && showLocations
+      : x.properties.visible
+  )
   return new MarkerClusterer(map, visibleMarkers, {
     imagePath: '/images/markerclusterer/m',
     gridSize: 50,
@@ -57,8 +66,6 @@ export const initMap = async (el, locations) => {
     return marker
   })
 
-  const markerClusterer = updateCluster(map, markers)
-
   window.google.maps.event.addListener(infowindow, 'domready', () => {
     const infoWindowElement = document.querySelector('.gm-style-iw')
     infoWindowElement.addEventListener('mouseover', () => {
@@ -69,5 +76,5 @@ export const initMap = async (el, locations) => {
     })
   })
 
-  return { map, markers, markerClusterer }
+  return { map, markers }
 }
