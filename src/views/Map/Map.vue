@@ -144,10 +144,9 @@ import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
 // TODO: update status laravel echo
 // TODO: fix tampilkan icon lokasi
 // TODO: update infowindow functionality
-// TODO: update height to 100%
 
 export default {
-  name: 'Logbook',
+  name: 'Map',
   components: {
     BDropdown,
     BDropdownForm,
@@ -310,7 +309,7 @@ export default {
 <style lang="scss">
 .map {
   width: 100%;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 170px);
 }
 
 .gm-style-iw-d {
