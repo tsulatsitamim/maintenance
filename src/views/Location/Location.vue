@@ -17,6 +17,9 @@
           <b-dropdown-item href="/api/v2/maintenance/locations?export=standard"
             >Rekap Standar</b-dropdown-item
           >
+          <b-dropdown-item href="/api/v2/maintenance/locations?export=complete"
+            >Rekap Lengkap</b-dropdown-item
+          >
         </b-dropdown>
 
         <div
