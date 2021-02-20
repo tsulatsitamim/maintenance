@@ -190,7 +190,7 @@ export default {
     },
     async getAssets() {
       const { data } = await axios.get(
-        `http://cendana15.test:3002/api/v2/maintenance/assets?location_id=${this.$route.params.id}`
+        `/api/v2/maintenance/assets?location_id=${this.$route.params.id}`
       )
       const assets = data.data.map(x => ({
         id: x.id,
