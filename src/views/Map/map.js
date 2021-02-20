@@ -20,6 +20,7 @@ export const updateCluster = (
     imagePath: '/images/markerclusterer/m',
     gridSize: 50,
     minimumClusterSize: 3,
+    maxZoom: 12,
   })
 }
 
