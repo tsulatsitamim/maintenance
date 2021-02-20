@@ -40,7 +40,9 @@ export const getLocationMarkers = async () => {
       lat: Number(x.lat) + randomNumber(),
       lng: Number(x.lng) + randomNumber(),
     },
-    icon: `/storage/img/icons/${x.location_type}_baik.png`.toLowerCase(),
+    icon: `/storage/img/icons/${x.location_type}_${
+      !x.log ? 'baik' : x.log.status
+    }.png`.toLowerCase(),
   }))
 }
 
