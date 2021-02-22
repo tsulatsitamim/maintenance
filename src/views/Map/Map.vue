@@ -51,7 +51,7 @@
                 :name="locationType.name"
               />
               <span class="mr-2"></span>
-              <img :src="locationType.icon" height="18px" class="mr-2" />
+              <img :src="locationType.icon" height="30px" class="mr-2" />
               {{ locationType.name }}
             </label>
           </b-dropdown-form>
@@ -83,7 +83,7 @@
                 :name="assetType.name"
               />
               <span class="mr-2"></span>
-              <img :src="assetType.icon" height="18px" class="mr-2" />
+              <img :src="assetType.icon" height="30px" class="mr-2" />
               {{ assetType.name }}
             </label>
           </b-dropdown-form>
