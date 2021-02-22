@@ -15,6 +15,7 @@ export const getLocationTypes = async () => {
     ...x,
     id: x.name,
     show: true,
+    icon: `/storage/img/icons/${x.name}_baik.png`.toLowerCase(),
   }))
 }
 
@@ -26,6 +27,7 @@ export const getAssetTypes = async () => {
     ...x,
     id: x.name,
     show: false,
+    icon: `/storage/img/icons/${x.name}_baik.png`.toLowerCase(),
   }))
 }
 
