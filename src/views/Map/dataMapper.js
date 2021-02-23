@@ -1,6 +1,7 @@
 export const locationMapper = location => ({
   id: location.id,
   location_type: location.location_type,
+  active_date: location.active_date,
   is_online: null,
   visible: true,
   status: location.log ? location.log.status : 'Baik',
@@ -23,6 +24,7 @@ export const locationMapper = location => ({
 export const assetMapper = asset => ({
   id: asset.id,
   is_online: asset.is_online,
+  active_date: asset.active_date,
   ip: asset.ip,
   asset_type_id: asset.asset_type_id,
   visible: false,

@@ -215,10 +215,27 @@ export default {
       initGoogleMapLib(),
     ])
 
+    const locationMarkersWithIp = locationMarkers.map(location => {
+      const assetsWithIp = assetMarkers.filter(
+        asset =>
+          asset.properties.ip &&
+          asset.properties.location_id === location.properties.id
+      )
+
+      return {
+        ...location,
+        properties: {
+          ...location.properties,
+          ip: assetsWithIp.length ? 'dummy_ip_address' : null,
+          is_online: !!assetsWithIp.find(asset => asset.properties.is_online),
+        },
+      }
+    })
+
     window.google = google
     this.locationTypes = locationTypes
     this.assetTypes = assetTypes
-    this.markers = [...locationMarkers, ...assetMarkers]
+    this.markers = [...locationMarkersWithIp, ...assetMarkers]
     this.links = initLinks(links)
 
     const { map, markers } = await initMap(
