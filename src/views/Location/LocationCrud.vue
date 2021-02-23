@@ -436,6 +436,10 @@ export default {
         }
         this.modal = false
         this.$toast('Lokasi berhasil disimpan.')
+
+        this.getLocationTypes()
+        this.getSubnetworks()
+        this.getNetworks()
       } catch (error) {
         this.$toast(error, 'danger')
       }

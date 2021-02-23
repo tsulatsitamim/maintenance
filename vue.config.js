@@ -16,8 +16,6 @@ module.exports = {
     port: 11005,
   },
   publicPath:
-    process.env.NODE_ENV === 'production'
-      ? '/maintenance-dev'
-      : '/maintenance-dev',
+    process.env.NODE_ENV === 'production' ? '/maintenance' : '/maintenance-dev',
   transpileDependencies: ['vue-echarts', 'resize-detector'],
 }
