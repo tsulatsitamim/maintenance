@@ -56,6 +56,37 @@
                 striped
                 @filtered="onFiltered"
               >
+                <template #custom-foot="{items}">
+                  <tr>
+                    <th colspan="3"></th>
+                    <th class="text-right text-dark">Total:</th>
+                    <th class="text-dark">
+                      {{
+                        items.reduce(
+                          (prev, next) => prev + next.assets_count,
+                          0
+                        )
+                      }}
+                    </th>
+                    <th class="text-dark">
+                      {{
+                        items.reduce(
+                          (prev, next) => prev + next.broken_assets_count,
+                          0
+                        )
+                      }}
+                    </th>
+                    <th class="text-dark">
+                      {{
+                        items.reduce(
+                          (prev, next) => prev + next.have_problem_assets_count,
+                          0
+                        )
+                      }}
+                    </th>
+                    <th></th>
+                  </tr>
+                </template>
                 <template #table-colgroup="scope">
                   <col
                     v-for="field in scope.fields"
