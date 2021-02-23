@@ -119,6 +119,16 @@
       </div>
     </div>
 
+    <b-form-group label="Tanggal Pemasangan">
+      <datepicker
+        v-model="editedItem.active_date"
+        format="dd MMMM yyyy"
+        name="active_date"
+        :language="id"
+        :value="editedItem.active_date"
+        input-class="form-control"
+      ></datepicker>
+    </b-form-group>
     <b-form-group label="Keterangan" label-for="description-input">
       <b-form-input
         name="description"
@@ -234,6 +244,9 @@ import cloneDeep from 'clone-deep'
 import { MVSelect2 } from 'metronic-vue'
 import Axios from 'axios'
 import jsonToFormData from 'json-form-data'
+import { id } from 'vuejs-datepicker/dist/locale'
+import Datepicker from 'vuejs-datepicker'
+import moment from 'moment'
 
 const initialItem = {
   id: null,
@@ -253,6 +266,8 @@ const initialItem = {
   links: [],
   network: 'VG',
   subnetwork: 'ME',
+  active_date: null,
+  inactive_date: null,
 }
 
 export default {
@@ -264,6 +279,7 @@ export default {
     MVSelect2,
     BButton,
     BSpinner,
+    Datepicker,
   },
   data() {
     return {
@@ -274,6 +290,7 @@ export default {
       locationTypes: [],
       loading: false,
       new_link_id: null,
+      id,
     }
   },
   mounted() {
@@ -391,6 +408,12 @@ export default {
             type: attachment.type ? 2 : 1,
           })),
         links: this.editedItem.links.map(x => x.id),
+        active_date: this.editedItem.active_date
+          ? moment(new Date(this.editedItem.active_date)).format('YYYY-MM-DD')
+          : null,
+        inactive_date: this.editedItem.inactive_date
+          ? moment(new Date(this.editedItem.inactive_date)).format('YYYY-MM-DD')
+          : null,
       }
 
       const form = jsonToFormData(payload)

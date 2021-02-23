@@ -123,7 +123,7 @@
         placeholder="Masukan URL data"
       ></b-form-input>
     </b-form-group>
-    <b-form-group label="Tanggal Aktif" label-for="due_at">
+    <b-form-group label="Tanggal Pemasangan">
       <datepicker
         v-model="editedItem.active_date"
         format="dd MMMM yyyy"
