@@ -23,7 +23,8 @@ Vue.config.productionTip = false
 const config = {
   self: {
     layout: 'default',
-    logo: 'MAINTENANCE',
+    logo: 'MONMAS',
+    title: 'MONMAS - Monitoring Network Management System',
   },
   aside: {
     self: {
