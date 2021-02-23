@@ -412,6 +412,8 @@ export default {
         }
         this.modal = false
         this.$toast('Aset berhasil disimpan.')
+        this.getLocations()
+        this.getAssetAttributes()
       } catch (error) {
         this.$toast(error, 'danger')
       }
