@@ -22,6 +22,15 @@
             </span>
           </div>
         </div>
+        <div
+          class="input-group input-group-sm input-group-solid max-w-150px my-1 mr-2"
+        >
+          <datepicker
+            v-model="log_date"
+            name="log_date"
+            input-class="form-control"
+          ></datepicker>
+        </div>
         <b-dropdown
           text="Lokasi"
           toggle-class="btn-light-primary font-weight-bolder btn-sm"
@@ -146,7 +155,7 @@ import {
   min,
 } from './dataProvider'
 import initGoogleMapLib from './initGoogleMapLib'
-import { initLinks, initMap, updateCluster } from './map'
+import { initLinks, initMap, initMarkers, updateCluster } from './map'
 import { debounce } from 'debounce'
 import LogStatus from './LogStatus'
 import { updateAssetLogStatus, updateLocationLogStatus } from './legend'
@@ -155,6 +164,7 @@ import LocationCrud from '../Location/LocationCrud'
 import AssetCrud from '../Location/Asset/AssetCrud'
 import { assetMapper, locationMapper } from './dataMapper'
 import axios from 'axios'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   name: 'Map',
@@ -164,9 +174,11 @@ export default {
     LogStatus,
     LocationCrud,
     AssetCrud,
+    Datepicker,
   },
   data() {
     return {
+      log_date: new Date(),
       filter: '',
 
       locationTypes: [],
@@ -209,9 +221,9 @@ export default {
     ] = await Promise.all([
       getLocationTypes(),
       getAssetTypes(),
-      getLocationMarkers(),
-      getAssetMarkers(),
-      getLinks(),
+      getLocationMarkers(this.log_date),
+      getAssetMarkers(this.log_date),
+      getLinks(this.log_date),
       initGoogleMapLib(),
     ])
 
@@ -257,6 +269,52 @@ export default {
     this.addInfoWindowEventListener()
   },
   watch: {
+    async log_date() {
+      this.mapMarkers = this.mapMarkers.map(x => x.setMap(null))
+      this.mapMarkers = []
+
+      this.links = this.links.map(x => x.setMap(null))
+      this.links = []
+
+      this.markerClusterer.clearMarkers()
+
+      const [locationMarkers, assetMarkers, links] = await Promise.all([
+        getLocationMarkers(this.log_date),
+        getAssetMarkers(this.log_date),
+        getLinks(this.log_date),
+      ])
+
+      const locationMarkersWithIp = locationMarkers.map(location => {
+        const assetsWithIp = assetMarkers.filter(
+          asset =>
+            asset.properties.ip &&
+            asset.properties.location_id === location.properties.id
+        )
+
+        return {
+          ...location,
+          properties: {
+            ...location.properties,
+            ip: assetsWithIp.length ? 'dummy_ip_address' : null,
+            is_online: !!assetsWithIp.find(asset => asset.properties.is_online),
+          },
+        }
+      })
+      this.markers = [...locationMarkersWithIp, ...assetMarkers]
+
+      this.mapMarkers = initMarkers(this.map, [
+        ...locationMarkersWithIp,
+        ...assetMarkers,
+      ])
+
+      this.links = initLinks(links)
+      this.links.map(x => x.setMap(this.allLinks ? this.map : null))
+
+      this.updateMarkersVisibility()
+      this.updateLegend()
+      this.updateCluster()
+      this.addInfoWindowEventListener()
+    },
     allLinks() {
       this.links.map(x => x.setMap(this.allLinks ? this.map : null))
     },

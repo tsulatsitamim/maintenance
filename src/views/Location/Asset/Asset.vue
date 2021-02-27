@@ -47,6 +47,15 @@
             </span>
           </div>
         </div>
+        <div
+          class="input-group input-group-sm input-group-solid max-w-150px my-1 mr-2"
+        >
+          <datepicker
+            v-model="log_date"
+            name="log_date"
+            input-class="form-control"
+          ></datepicker>
+        </div>
         <a
           href="#"
           class="btn btn-light-primary font-weight-bolder btn-sm"
@@ -143,6 +152,8 @@ import { BCard, BTableSimple } from 'bootstrap-vue'
 import groupBy from 'ramda/src/groupBy'
 import axios from 'axios'
 import AssetCrud from './AssetCrud'
+import Datepicker from 'vuejs-datepicker'
+import moment from 'moment'
 
 export default {
   name: 'Asset',
@@ -150,14 +161,20 @@ export default {
     BCard,
     AssetCrud,
     BTableSimple,
+    Datepicker,
   },
   data() {
     return {
       filter: '',
-
+      log_date: new Date(),
       assets: [],
       title: 'Daftar Aset',
     }
+  },
+  watch: {
+    log_date() {
+      this.getAssets()
+    },
   },
   beforeDestroy() {
     window.Echo.leaveChannel('private-asset')
@@ -190,7 +207,11 @@ export default {
     },
     async getAssets() {
       const { data } = await axios.get(
-        `/api/v2/maintenance/assets?location_id=${this.$route.params.id}`
+        `/api/v2/maintenance/assets?location_id=${
+          this.$route.params.id
+        }&log_date=${moment(this.log_date)
+          .add(1, 'days')
+          .format('YYYY-MM-DD')}`
       )
       const assets = data.data.map(x => ({
         id: x.id,

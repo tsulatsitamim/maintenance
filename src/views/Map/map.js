@@ -25,10 +25,6 @@ export const updateCluster = (
 }
 
 export const initMap = async (el, locations) => {
-  let infowindowTimeOut = null
-
-  const infowindow = new window.google.maps.InfoWindow()
-
   const bounds = new window.google.maps.LatLngBounds()
 
   const map = new window.google.maps.Map(el, {
@@ -38,9 +34,45 @@ export const initMap = async (el, locations) => {
   })
 
   map.fitBounds(bounds)
+  const markers = initMarkers(map, locations, bounds)
 
-  const markers = locations.map(x => {
-    bounds.extend(x.position)
+  return { map, markers }
+}
+
+export const initLinks = links =>
+  links.map(
+    link =>
+      new window.google.maps.Polyline({
+        path: [
+          { lat: Number(link.from.lat), lng: Number(link.from.lng) },
+          { lat: Number(link.to.lat), lng: Number(link.to.lng) },
+        ],
+        geodesic: true,
+        strokeColor: link.is_online ? '#0000dd' : '#ff0000',
+        strokeOpacity: 0.5,
+        strokeWeight: 1,
+      })
+  )
+
+export const initMarkers = (map, locations, bounds = null) => {
+  let infowindowTimeOut = null
+  const infowindow = new window.google.maps.InfoWindow()
+
+  window.google.maps.event.addListener(infowindow, 'domready', () => {
+    const infoWindowElement = document.querySelector('.gm-style-iw')
+    infoWindowElement.addEventListener('mouseover', () => {
+      clearTimeout(infowindowTimeOut)
+    })
+    infoWindowElement.addEventListener('mouseleave', () => {
+      infowindow.close()
+    })
+  })
+
+  return locations.map(x => {
+    if (bounds) {
+      bounds.extend(x.position)
+    }
+
     const marker = new window.google.maps.Marker({
       ...x,
       map,
@@ -64,33 +96,7 @@ export const initMap = async (el, locations) => {
       marker.properties.visible = false
       marker.setVisible(false)
     }
+
     return marker
   })
-
-  window.google.maps.event.addListener(infowindow, 'domready', () => {
-    const infoWindowElement = document.querySelector('.gm-style-iw')
-    infoWindowElement.addEventListener('mouseover', () => {
-      clearTimeout(infowindowTimeOut)
-    })
-    infoWindowElement.addEventListener('mouseleave', () => {
-      infowindow.close()
-    })
-  })
-
-  return { map, markers }
 }
-
-export const initLinks = links =>
-  links.map(
-    link =>
-      new window.google.maps.Polyline({
-        path: [
-          { lat: Number(link.from.lat), lng: Number(link.from.lng) },
-          { lat: Number(link.to.lat), lng: Number(link.to.lng) },
-        ],
-        geodesic: true,
-        strokeColor: link.is_online ? '#0000dd' : '#ff0000',
-        strokeOpacity: 0.5,
-        strokeWeight: 1,
-      })
-  )

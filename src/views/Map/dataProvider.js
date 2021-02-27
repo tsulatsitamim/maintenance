@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { assetMapper, locationMapper } from './dataMapper'
+import moment from 'moment'
 
 export const min = 0.999999
 export const max = 1.000001
@@ -31,9 +32,13 @@ export const getAssetTypes = async () => {
   }))
 }
 
-export const getLocationMarkers = async () => {
+export const getLocationMarkers = async date => {
   const { data } = await axios.get(
-    `/api/v2/maintenance/locations?coordinates=true&avatar=true`
+    `/api/v2/maintenance/locations?coordinates=true&avatar=true&log_date=${moment(
+      date
+    )
+      .add(1, 'days')
+      .format('YYYY-MM-DD')}`
   )
 
   return data.data.map(x => ({
@@ -48,9 +53,13 @@ export const getLocationMarkers = async () => {
   }))
 }
 
-export const getAssetMarkers = async () => {
+export const getAssetMarkers = async date => {
   const { data } = await axios.get(
-    `/api/v2/maintenance/assets?coordinates=true&avatar=true`
+    `/api/v2/maintenance/assets?coordinates=true&avatar=true&log_date=${moment(
+      date
+    )
+      .add(1, 'days')
+      .format('YYYY-MM-DD')}`
   )
 
   return data.data.map(x => {
@@ -82,8 +91,12 @@ export const getAssetMarkers = async () => {
   })
 }
 
-export const getLinks = async () => {
-  const { data } = await axios.get(`/api/v2/maintenance/location-links`)
+export const getLinks = async date => {
+  const { data } = await axios.get(
+    `/api/v2/maintenance/location-links?log_date=${moment(date)
+      .add(1, 'days')
+      .format('YYYY-MM-DD')}`
+  )
   return data.filter(
     link => link.from.lat && link.from.lng && link.to.lat && link.to.lng
   )
