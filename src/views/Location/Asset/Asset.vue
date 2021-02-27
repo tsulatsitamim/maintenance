@@ -213,6 +213,9 @@ export default {
           .add(1, 'days')
           .format('YYYY-MM-DD')}`
       )
+
+      const getStatus = x => (x.status_log ? x.status_log.status : x.is_online)
+
       const assets = data.data.map(x => ({
         id: x.id,
         group: x.asset_type.group,
@@ -229,7 +232,7 @@ export default {
         last_log_date: x.log ? x.log.date : '',
         log: x.log ? x.log.status : '',
         is_online:
-          x.is_online === null ? '' : x.is_online ? 'Online' : 'Offline',
+          getStatus(x) === null ? '' : getStatus(x) ? 'Online' : 'Offline',
       }))
 
       this.assets = groupBy(x => x.group, assets)

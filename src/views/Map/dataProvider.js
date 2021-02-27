@@ -68,7 +68,7 @@ export const getAssetMarkers = async date => {
     }.png`.toLowerCase()
 
     const iconWithIsOnlineCheck = `/storage/img/icons/${x.asset_type.method}_${
-      x.is_online ? 'baik' : 'bermasalah'
+      (x.status_log ? x.status_log.status : x.is_online) ? 'baik' : 'bermasalah'
     }.png`.toLowerCase()
 
     // Short-period seismometers use icon from log condition
