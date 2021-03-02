@@ -34,7 +34,7 @@ export const getAssetTypes = async () => {
 
 export const getLocationMarkers = async date => {
   const { data } = await axios.get(
-    `/api/v2/maintenance/locations?coordinates=true&avatar=true&log_date=${moment(
+    `/api/v2/maintenance/locations?active=true&coordinates=true&avatar=true&log_date=${moment(
       date
     )
       .add(1, 'days')
@@ -55,7 +55,7 @@ export const getLocationMarkers = async date => {
 
 export const getAssetMarkers = async date => {
   const { data } = await axios.get(
-    `/api/v2/maintenance/assets?coordinates=true&avatar=true&log_date=${moment(
+    `/api/v2/maintenance/assets?active=true&coordinates=true&avatar=true&log_date=${moment(
       date
     )
       .add(1, 'days')
@@ -93,7 +93,7 @@ export const getAssetMarkers = async date => {
 
 export const getLinks = async date => {
   const { data } = await axios.get(
-    `/api/v2/maintenance/location-links?log_date=${moment(date)
+    `/api/v2/maintenance/location-links?active=true&log_date=${moment(date)
       .add(1, 'days')
       .format('YYYY-MM-DD')}`
   )
