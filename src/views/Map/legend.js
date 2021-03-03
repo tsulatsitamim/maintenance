@@ -39,16 +39,9 @@ export const updateLocationLogStatus = markers => {
 }
 
 export const updateAssetLogStatus = (markers, assetTypes) => {
-  const locationIds = markers
-    .filter(x => x.properties.type === 'location' && x.visible)
-    .map(x => x.properties.id)
-
   const assetTypesKeys = assetTypes.filter(x => x.show).map(x => x.name)
   const assetMarkers = markers.filter(
-    x =>
-      locationIds.includes(x.properties.location_id) &&
-      x.properties.method &&
-      assetTypesKeys.includes(x.properties.method)
+    x => x.properties.method && assetTypesKeys.includes(x.properties.method)
   )
 
   return {

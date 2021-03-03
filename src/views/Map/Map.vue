@@ -123,12 +123,6 @@
                 :status="locationLog"
               ></LogStatus>
               <LogStatus title="Kondisi Aset" :status="assetLog"></LogStatus>
-              <div class="list-group-item">
-                <label>
-                  <input v-model="showLocations" type="checkbox" />
-                  Tampilkan icon lokasi
-                </label>
-              </div>
             </div>
           </div>
         </div>
