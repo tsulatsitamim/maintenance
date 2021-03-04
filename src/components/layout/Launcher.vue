@@ -79,7 +79,7 @@ export default {
         {
           name: 'Assignment',
           icon: `${this.$baseUrl}/icon/launcher/task.svg`,
-          link: '/assignment',
+          link: '/assignment/',
         },
         {
           name: 'Data Analysis',
