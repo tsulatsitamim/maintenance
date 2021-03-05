@@ -80,7 +80,11 @@ export const getAssetMarkers = async date => {
     return {
       properties: {
         ...properties,
-        is_online: isShortPeriod ? isShortPeriodOnline : x.is_online,
+        is_online: isShortPeriod
+          ? isShortPeriodOnline
+          : x.status_log
+          ? x.status_log.status
+          : x.is_online,
       },
       position: {
         lat: Number(x.lat) * (Math.random() * (max - min) + min),
