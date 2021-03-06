@@ -42,6 +42,17 @@
             </span>
           </div>
         </div>
+
+        <div
+          class="input-group input-group-sm input-group-solid max-w-150px my-1 mr-2"
+        >
+          <datepicker
+            v-model="log_date"
+            name="log_date"
+            input-class="form-control"
+          ></datepicker>
+        </div>
+
         <a
           href="#"
           class="btn btn-light-primary font-weight-bolder btn-sm"
@@ -169,6 +180,8 @@ import {
 } from 'bootstrap-vue'
 import axios from 'axios'
 import LocationCrud from './LocationCrud'
+import Datepicker from 'vuejs-datepicker'
+import moment from 'moment'
 
 export default {
   name: 'Location',
@@ -180,11 +193,13 @@ export default {
     LocationCrud,
     BDropdown,
     BDropdownItem,
+    Datepicker,
   },
   data() {
     return {
       editedItem: {},
       modal: false,
+      log_date: new Date(),
       fields: [
         {
           label: 'Kode',
@@ -212,6 +227,11 @@ export default {
           sortable: true,
         },
         {
+          label: 'Status',
+          key: 'is_online',
+          sortable: true,
+        },
+        {
           label: 'Actions',
           key: 'actions',
           class: 'text-center',
@@ -228,6 +248,11 @@ export default {
       xlsxUrlStandar: '#',
     }
   },
+  watch: {
+    log_date() {
+      this.getLocations()
+    },
+  },
   mounted() {
     this.getLocations()
   },
@@ -241,7 +266,13 @@ export default {
   },
   methods: {
     async getLocations() {
-      const { data } = await axios.get(`/api/v2/maintenance/locations`)
+      const { data } = await axios.get(
+        `/api/v2/maintenance/locations?table=true&log_date=${moment(
+          this.log_date
+        )
+          .add(1, 'days')
+          .format('YYYY-MM-DD')}`
+      )
       this.locations = data.data.map(x => ({
         ...x,
         condition: x.log ? x.log.status : '',
