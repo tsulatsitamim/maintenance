@@ -322,12 +322,24 @@ export default {
     },
     locationTypes: {
       handler() {
+        if (
+          this.locationTypes.some(x => x.show) &&
+          this.assetTypes.some(x => x.show)
+        ) {
+          return this.assetTypes.map(x => (x.show = false))
+        }
         this.updateMarkersVisibility()
       },
       deep: true,
     },
     assetTypes: {
       handler() {
+        if (
+          this.assetTypes.some(x => x.show) &&
+          this.locationTypes.some(x => x.show)
+        ) {
+          return this.locationTypes.map(x => (x.show = false))
+        }
         this.updateMarkersVisibility()
       },
       deep: true,
