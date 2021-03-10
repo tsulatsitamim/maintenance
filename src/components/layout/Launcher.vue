@@ -71,9 +71,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/report.svg`,
           link: '/data-entry',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
+            'ka-seksi-pl',
             'ka-seksi-merapi',
             'staf-seksi-merapi',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
         {
@@ -86,9 +89,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/analytic.svg`,
           link: '/data-analysis',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
+            'ka-seksi-pl',
             'ka-seksi-merapi',
             'staf-seksi-merapi',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
         {
@@ -96,9 +102,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/display.svg`,
           link: '/display-device',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
+            'ka-seksi-pl',
             'ka-seksi-merapi',
             'staf-seksi-merapi',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
         {
@@ -106,9 +115,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/maintenance.svg`,
           link: '/maintenance',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
+            'ka-seksi-pl',
             'ka-seksi-merapi',
             'staf-seksi-merapi',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
         {
@@ -116,9 +128,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/broadcast.jpg`,
           link: '/broadcasting',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
+            'ka-seksi-pl',
             'ka-seksi-merapi',
             'staf-seksi-merapi',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
         {
@@ -131,10 +146,12 @@ export default {
           icon: `${this.$baseUrl}/icon/launcher/beaker.png`,
           link: '/lims',
           hidden: ![
+            'ka-bpptkg',
+            'ka-seksi-tu',
+            'ka-seksi-mt',
             'ka-seksi-pl',
+            'ka-seksi-merapi',
             'staf-seksi-pl',
-            'ka-bpptkg',
-            'ka-bpptkg',
           ].includes(this.authUser.position_name),
         },
       ]
