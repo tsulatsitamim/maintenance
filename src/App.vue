@@ -1,18 +1,14 @@
 <template>
   <div id="app" class="d-flex flex-column flex-root">
     <portal-target name="topbar"></portal-target>
-    <MVHeaderMobile>
-      <HeaderMenu :user="authUser"></HeaderMenu>
-    </MVHeaderMobile>
+    <MVHeaderMobile> </MVHeaderMobile>
     <!-- <MVLoader :logo="loaderLogo"></MVLoader> -->
     <div class="d-flex flex-row flex-column-fluid page">
       <MVAside v-if="asideEnabled">
         <MVMenu :menus="menus"></MVMenu>
       </MVAside>
       <div id="kt_wrapper" class="d-flex flex-column flex-row-fluid wrapper">
-        <MVHeader>
-          <HeaderMenu :user="authUser"></HeaderMenu>
-        </MVHeader>
+        <MVHeader> </MVHeader>
         <router-view />
         <MVFooter title="BPPTKG"></MVFooter>
       </div>
@@ -42,7 +38,7 @@ export default {
     HtmlClass.init(this.layoutConfig())
   },
   computed: {
-    ...mapGetters(['layoutConfig', 'authUser']),
+    ...mapGetters(['layoutConfig']),
 
     /**
      * Set the subheader display
